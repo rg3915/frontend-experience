@@ -1,8 +1,38 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+  <style>
+    #add_contact {
+      margin-bottom: 10px;
+    }
+    #edit_contact {
+      color: #0066FF;
+      cursor: pointer;
+    }
+    #delete_contact {
+      color: #d9534f;
+      cursor: pointer;
+      margin-left: 10px;
+    }
+  </style>
+
   <div class="starter-template">
     <h1>Single Page Application</h1>
     <p class="lead">Exemplo de uma SPA com Django, Ajax e jQuery.</p>
   </div>
+  <hr>
+  <div class="col-sm-4 col-sm-offset-4">
+    <button id="add_contact" class="btn btn-primary"><i class="fa fa-plus"></i> Adicionar</button>
+    <div class="list-group">
+      <div class="list-group-item">
+        <span id="delete_contact" class="pull-right"><i class="fa fa-lg fa-times"></i></span>
+        <span id="edit_contact" class="pull-right"><i class="fa fa-lg fa-pencil-square-o"></i></span>
+        <p><b>Nome:</b> Sr. Regis Santos</p>
+        <p><b>e-mail:</b> regis@example.com</p>
+        <p><b>Telefone:</b> 92222-0000</p>
+      </div>
+    </div>
+  </div>
+
 {% endblock content %}
