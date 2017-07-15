@@ -1,3 +1,4 @@
+import uuid
 from django.db import models
 
 
@@ -18,6 +19,8 @@ TREATMENT = (
 
 
 class Contact(models.Model):
+    # Gera um uuid de 32 caracteres
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     treatment = models.CharField(
         'tratamento', max_length=4, choices=TREATMENT, null=True, blank=True)
     first_name = models.CharField('nome', max_length=50)
