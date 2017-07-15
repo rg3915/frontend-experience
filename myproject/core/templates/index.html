@@ -23,7 +23,9 @@
   </div>
   <hr>
   <div class="col-sm-4 col-sm-offset-4">
-    <button id="add_contact" class="btn btn-primary"><i class="fa fa-plus"></i> Adicionar</button>
+    <button id="add_contact" class="btn btn-primary" data-target="#add_contact_modal" data-toggle="modal">
+      <i class="fa fa-plus"></i> Contato
+    </button>
     <div class="list-group">
       <div class="list-group-item">
         <span id="delete_contact" class="pull-right"><i class="fa fa-lg fa-times"></i></span>
@@ -34,5 +36,30 @@
       </div>
     </div>
   </div>
+
+<!-- Add Contact Modal -->
+<div class="modal fade" id="add_contact_modal" role="dialog" aria-labelledby="addContactModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                 
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                <h4 class="modal-title" id="addContactModalLabel">
+                    Modal title
+                </h4>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                 
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary">Salvar</button>
+            </div>
+        </div> <!-- modal-content -->
+        
+    </div> <!-- modal-dialog -->
+    
+</div> <!-- end modal -->
 
 {% endblock content %}
