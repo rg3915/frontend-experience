@@ -13,7 +13,7 @@
     <button id="add_contact" class="btn btn-primary" data-target="#add_contact_modal" data-toggle="modal">
       <i class="fa fa-plus"></i> Contato
     </button>
-    <div class="list-group">
+    <div id="list_contact" class="list-group">
       {% for contact in contacts %}
         <div class="list-group-item">
           <span id="delete_contact" class="pull-right"><i class="fa fa-lg fa-times"></i></span>
@@ -81,6 +81,16 @@
         // remove os valores dos inputs
         $('#add_contact_form')[0].reset();
         $('#dismiss_contact_close').click();
+        // Adicionando novo contato na lista
+        $('#list_contact').prepend(
+          '<div class="list-group-item">' +
+          '<span id="delete_contact" class="pull-right"><i class="fa fa-lg fa-times"></i></span>' +
+          '<span id="edit_contact" class="pull-right"><i class="fa fa-lg fa-pencil-square-o"></i></span>' +
+          '<p><b>Nome:</b> ' + response.name + '</p>' +
+          '<p><b>e-mail:</b> ' + response.email + '</p>' +
+          '<p><b>Telefone:</b> ' + response.phone + '</p>' +
+          '</div>'
+        );
       },
       error: function(xhr, errmsg, err) {
         console.log('Ocorreu um erro!');
