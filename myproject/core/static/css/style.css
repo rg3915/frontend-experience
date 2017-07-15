@@ -1,0 +1,12 @@
+#add_contact {
+  margin-bottom: 10px;
+}
+#edit_contact {
+  color: #0066FF;
+  cursor: pointer;
+}
+#delete_contact {
+  color: #d9534f;
+  cursor: pointer;
+  margin-left: 10px;
+}
