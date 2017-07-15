@@ -30,9 +30,10 @@ class Contact(models.Model):
     phone = models.CharField('telefone', max_length=20, null=True, blank=True)
 
     class Meta:
-        ordering = ('first_name',)
+        # ordering = ('first_name',)
         verbose_name = 'contato'
         verbose_name_plural = 'contatos'
 
     def __str__(self):
-        return '%s %s %s' % (self.get_treatment_display(), self.first_name, self.last_name)
+        name = [self.get_treatment_display(), self.first_name, self.last_name]
+        return ' '.join(filter(None, name))

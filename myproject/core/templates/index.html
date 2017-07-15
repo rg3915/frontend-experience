@@ -12,13 +12,15 @@
       <i class="fa fa-plus"></i> Contato
     </button>
     <div class="list-group">
-      <div class="list-group-item">
-        <span id="delete_contact" class="pull-right"><i class="fa fa-lg fa-times"></i></span>
-        <span id="edit_contact" class="pull-right"><i class="fa fa-lg fa-pencil-square-o"></i></span>
-        <p><b>Nome:</b> Sr. Regis Santos</p>
-        <p><b>e-mail:</b> regis@example.com</p>
-        <p><b>Telefone:</b> 92222-0000</p>
-      </div>
+      {% for contact in contacts %}
+        <div class="list-group-item">
+          <span id="delete_contact" class="pull-right"><i class="fa fa-lg fa-times"></i></span>
+          <span id="edit_contact" class="pull-right"><i class="fa fa-lg fa-pencil-square-o"></i></span>
+          <p><b>Nome:</b> {{ contact }}</p>
+          <p><b>e-mail:</b> {{ contact.email }}</p>
+          <p><b>Telefone:</b> {{ contact.phone }}</p>
+        </div>
+      {% endfor %}
     </div>
   </div>
 
