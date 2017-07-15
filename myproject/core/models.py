@@ -17,7 +17,7 @@ TREATMENT = (
 )
 
 
-class Person(models.Model):
+class Contact(models.Model):
     treatment = models.CharField(
         'tratamento', max_length=4, choices=TREATMENT, null=True, blank=True)
     first_name = models.CharField('nome', max_length=50)
@@ -32,4 +32,4 @@ class Person(models.Model):
         verbose_name_plural = 'contatos'
 
     def __str__(self):
-        return '%s %s %s' % (self.treatment, self.first_name, self.last_name)
+        return '%s %s %s' % (self.get_treatment_display(), self.first_name, self.last_name)
