@@ -15,8 +15,8 @@
     </button>
     <div id="list_contact" class="list-group">
       {% for contact in contacts %}
-        <div class="list-group-item">
-          <span id="delete_contact" class="pull-right"><i class="fa fa-lg fa-times"></i></span>
+        <div id="item_{{ contact.id }}" class="list-group-item">
+          <span id="delete_contact" class="js-delete-contact pull-right" data-id="{{ contact.id }}" data-contact="{{ contact }}" data-target="#del_contact_modal" data-toggle="modal"><i class="fa fa-lg fa-times"></i></span>
           <span id="edit_contact" class="pull-right"><i class="fa fa-lg fa-pencil-square-o"></i></span>
           <p><b>Nome:</b> {{ contact }}</p>
           <p><b>e-mail:</b> {{ contact.email }}</p>
@@ -46,6 +46,33 @@
                    
                   <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
                   <button type="submit" class="btn btn-primary">Salvar</button>
+              </div>
+            </form>
+        </div> <!-- modal-content -->
+        
+    </div> <!-- modal-dialog -->
+    
+</div> <!-- end modal -->
+
+<!-- Delete Contact Modal -->
+<div class="modal fade" id="del_contact_modal" role="dialog" aria-labelledby="delContactModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                 
+                <button id="dismiss_del_contact_close" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                <h4 class="modal-title" id="delContactModalLabel">
+                    Deletar Contato
+                </h4>
+            </div>
+            <form id="del_contact_form" action="." method="POST">
+              <div id="id_del_contact" class="modal-body">
+                {% csrf_token %}
+              </div>
+              <div class="modal-footer">
+                   
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                  <button type="submit" class="btn btn-primary">Deletar</button>
               </div>
             </form>
         </div> <!-- modal-content -->
@@ -84,7 +111,7 @@
         // Adicionando novo contato na lista
         $('#list_contact').prepend(
           '<div class="list-group-item">' +
-          '<span id="delete_contact" class="pull-right"><i class="fa fa-lg fa-times"></i></span>' +
+          '<span id="delete_contact" class="js-delete-contact pull-right" data-id="' + response.id + '" data-contact="' + response.name + '" data-target="#del_contact_modal" data-toggle="modal"><i class="fa fa-lg fa-times"></i></span>' +
           '<span id="edit_contact" class="pull-right"><i class="fa fa-lg fa-pencil-square-o"></i></span>' +
           '<p><b>Nome:</b> ' + response.name + '</p>' +
           '<p><b>e-mail:</b> ' + response.email + '</p>' +
@@ -97,5 +124,47 @@
       },
     });
   }
+
+  // Insere valores nos campos de del_contact_form
+  $('.js-delete-contact').on('click', function() {
+    $('#contact_id').remove();
+    $('#name_id').remove();
+    var id = $(this).data('id');
+    var contact = $(this).data('contact');
+    $('#id_del_contact').append('<input id="contact_id" name="contact_id" style="display:none;" value="' + id + '">');
+    $('#id_del_contact').append('<p id="name_id">' + contact + '</p>');
+  });
+
+  // Delete contact
+  $('#del_contact_form').on('submit', function (e) {
+    e.preventDefault();
+    del_contact_post();
+  });
+
+  {% for contact in contacts %}
+    function del_contact_post() {
+      console.log("{% url 'core:contact_delete' pk=contact.pk %}");
+      let contact_id = $('#contact_id').val();
+      console.log(contact_id);
+      $.ajax({
+        url: "{% url 'core:contact_delete' pk=contact.pk %}",
+        type: "POST",
+        data: {
+          contact_id: contact_id,
+        },
+        success: function(response) {
+          console.log(response.status);
+          // remove os valores dos inputs
+          $('#del_contact_form')[0].reset();
+          // Remove o novo contato da lista
+          $('#dismiss_del_contact_close').click();
+          $('#item_' + contact_id).remove();
+        },
+        error: function(xhr, errmsg, err) {
+          console.log('Ocorreu um erro!');
+        },
+      });
+    }
+  {% endfor %}
   </script>
 {% endblock js %}

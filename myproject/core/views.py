@@ -31,6 +31,7 @@ def contact_add(request):
         name = [f.get_treatment_display(), f.first_name, f.last_name]
         name = ' '.join(filter(None, name))
         ctx = {
+            'id': f.id,
             'name': name,
             'email': f.email,
             'phone': f.phone,
@@ -39,3 +40,13 @@ def contact_add(request):
     else:
         messages.error(request, 'Favor preencher o nome do contato.')
         return HttpResponseRedirect(reverse('home'))
+
+
+def contact_delete(request, pk):
+    if request.is_ajax() and request.method == 'POST':
+        contact_id = request.POST.get('contact_id')
+        print(contact_id)
+        contact = Contact.objects.get(pk=contact_id)
+        contact.delete()
+        ctx = {'status': 'Contato deletado com sucesso.'}
+        return JsonResponse(ctx)
