@@ -54,6 +54,7 @@
     
 </div> <!-- end modal -->
 
+
 <!-- Delete Contact Modal -->
 <div class="modal fade" id="del_contact_modal" role="dialog" aria-labelledby="delContactModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -66,13 +67,11 @@
                 </h4>
             </div>
             <form id="del_contact_form" action="." method="POST">
-              <div id="id_del_contact" class="modal-body">
-                {% csrf_token %}
-              </div>
+              <div id="id_del_contact" class="modal-body"></div>
               <div class="modal-footer">
                    
                   <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
-                  <button type="submit" class="btn btn-primary">Deletar</button>
+                  <button type="submit" class="btn btn-danger">Deletar</button>
               </div>
             </form>
         </div> <!-- modal-content -->
@@ -125,6 +124,8 @@
     });
   }
 
+  // Insere valores nos campos de edit_contact_form
+
   // Insere valores nos campos de del_contact_form
   $('.js-delete-contact').on('click', function() {
     $('#contact_id').remove();
@@ -158,7 +159,9 @@
           $('#del_contact_form')[0].reset();
           // Remove o novo contato da lista
           $('#dismiss_del_contact_close').click();
-          $('#item_' + contact_id).remove();
+          $('#item_' + contact_id).fadeTo('slow', 0).slideUp(500, function(){
+            $(this).remove();
+          });
         },
         error: function(xhr, errmsg, err) {
           console.log('Ocorreu um erro!');
@@ -166,5 +169,6 @@
       });
     }
   {% endfor %}
+
   </script>
 {% endblock js %}
