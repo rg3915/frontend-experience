@@ -17,7 +17,7 @@
       {% for contact in contacts %}
         <div id="item_{{ contact.id }}" class="list-group-item">
           <span id="delete_contact" class="js-delete-contact pull-right" data-id="{{ contact.id }}" data-contact="{{ contact }}" data-target="#del_contact_modal" data-toggle="modal"><i class="fa fa-lg fa-times"></i></span>
-          <span id="edit_contact" class="pull-right"><i class="fa fa-lg fa-pencil-square-o"></i></span>
+          <span id="edit_contact" class="js-edit-contact pull-right" data-id="{{ contact.id }}" data-url="{% url 'core:contact_json' pk=contact.pk %}" data-target="#edit_contact_modal" data-toggle="modal"><i class="fa fa-lg fa-pencil-square-o"></i></span>
           <p><b>Nome:</b> {{ contact }}</p>
           <p><b>e-mail:</b> {{ contact.email }}</p>
           <p><b>Telefone:</b> {{ contact.phone }}</p>
@@ -54,6 +54,34 @@
     
 </div> <!-- end modal -->
 
+<!-- Edit Contact Modal -->
+<div class="modal fade" id="edit_contact_modal" role="dialog" aria-labelledby="editContactModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                 
+                <button id="dismiss_edit_contact_close" type="button" class="close" data-dismiss="modal" aria-hidden="true">x</button>
+                <h4 class="modal-title" id="editContactModalLabel">
+                    Editar Contato
+                </h4>
+            </div>
+            <form id="edit_contact_form" action="." method="POST">
+              <div class="modal-body">
+                <div id="id_edit_contact"></div>
+                {% csrf_token %}
+                {{ contact_form|bootstrap }}
+              </div>
+              <div class="modal-footer">
+                   
+                  <button type="button" class="btn btn-default" data-dismiss="modal">Cancelar</button>
+                  <button type="submit" class="btn btn-primary">Salvar</button>
+              </div>
+            </form>
+        </div> <!-- modal-content -->
+        
+    </div> <!-- modal-dialog -->
+    
+</div> <!-- end modal -->
 
 <!-- Delete Contact Modal -->
 <div class="modal fade" id="del_contact_modal" role="dialog" aria-labelledby="delContactModalLabel" aria-hidden="true">
@@ -125,19 +153,72 @@
   }
 
   // Insere valores nos campos de edit_contact_form
+  $('.js-edit-contact').on('click', function() {
+    // Remove add_contact_form
+    $('#add_contact_form').remove();
+    $('#contact_edit_id').remove();
+    let id_edit = $(this).data('id');
+    $('#id_edit_contact').append('<input id="contact_edit_id" name="contact_edit_id" style="display:none;" value="' + id_edit + '">');
+    let url = $(this).data('url');
+    $.getJSON(url, function(data) {
+        $('#id_treatment').val(data[0].fields.treatment);
+        $('#id_treatment').val(data[0].fields.treatment);
+        $('#id_first_name').val(data[0].fields.first_name);
+        $('#id_last_name').val(data[0].fields.last_name);
+        $('#id_email').val(data[0].fields.email);
+        $('#id_phone').val(data[0].fields.phone);
+    });
+  });
+
+  // Edit contact
+  $('#edit_contact_form').on('submit', function(e) {
+    e.preventDefault();
+    edit_contact_post();
+  });
+
+  {% for contact in contacts %}
+    function edit_contact_post() {
+      let contact_edit_id = $('#contact_edit_id').val();
+      console.log(contact_edit_id);
+      $.ajax({
+        url: "{% url 'core:contact_edit' pk=contact.pk %}",
+        type: "POST",
+        data: {
+          contact_edit_id: contact_edit_id,
+          treatment: $('#id_treatment').val(),
+          first_name: $('#id_first_name').val(),
+          last_name: $('#id_last_name').val(),
+          email: $('#id_email').val(),
+          phone: $('#id_phone').val(),
+        },
+        success: function(response) {
+          console.log(response.status);
+          // remove os valores dos inputs
+          $('#edit_contact_form')[0].reset();
+          // Remove o novo contato da lista
+          $('#dismiss_edit_contact_close').click();
+          // Não fiz update dos items
+          location.reload();
+        },
+        error: function(xhr, errmsg, err) {
+          console.log('Ocorreu um erro!');
+        },
+      });
+    }
+  {% endfor %}
 
   // Insere valores nos campos de del_contact_form
   $('.js-delete-contact').on('click', function() {
     $('#contact_id').remove();
     $('#name_id').remove();
-    var id = $(this).data('id');
-    var contact = $(this).data('contact');
+    let id = $(this).data('id');
+    let contact = $(this).data('contact');
     $('#id_del_contact').append('<input id="contact_id" name="contact_id" style="display:none;" value="' + id + '">');
     $('#id_del_contact').append('<p id="name_id">' + contact + '</p>');
   });
 
   // Delete contact
-  $('#del_contact_form').on('submit', function (e) {
+  $('#del_contact_form').on('submit', function(e) {
     e.preventDefault();
     del_contact_post();
   });
