@@ -18,7 +18,7 @@ python manage.py runserver
 
 ## Bibliotecas do jQuery e Bootstrap
 
-Eu poderia pegar as bibliotecas de uma CDN...
+Estou usando CDN :)
 
 ```html
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -27,7 +27,6 @@ Eu poderia pegar as bibliotecas de uma CDN...
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 ```
 
-... mas eu baixei todos eles.
-
 ## Endpoints da api
 
+...
